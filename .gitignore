@@ -1,8 +1,9 @@
 # Produced files
 
-/build
-/build/*
+targets/stm32f4/build
+targets/stm32f4/build/*
 /test/tmp/*
+gdbinit
 
 # IDE related files
 nbproject
