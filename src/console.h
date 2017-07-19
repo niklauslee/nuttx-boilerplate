@@ -1,0 +1,1 @@
+#define COMMAND_LENGTH_MAX 255

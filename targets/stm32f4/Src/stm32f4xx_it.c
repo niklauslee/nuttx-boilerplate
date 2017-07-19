@@ -42,8 +42,10 @@
 /* External variables --------------------------------------------------------*/
 
 /******************************************************************************/
-/*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
+/*            Cortex-M4 Processor Interruption and Exception Handlers         */
 /******************************************************************************/
+
+extern UART_HandleTypeDef huart1;
 
 /**
 * @brief This function handles System tick timer.
@@ -66,6 +68,11 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32f4xx.s).                    */
 /******************************************************************************/
+
+void USART2_IRQHandler(void)
+{
+  HAL_UART_IRQHandler(&huart1);
+}
 
 /* USER CODE BEGIN 1 */
 
