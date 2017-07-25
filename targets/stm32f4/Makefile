@@ -48,6 +48,8 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES =  \
+../../src/console.c \
+../../src/event_loop.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c \
@@ -65,6 +67,7 @@ Drivers/BSP/STM32F4xx-Nucleo/stm32f4xx_nucleo.c \
 Src/stm32f4xx_it.c \
 Src/stm32f4xx_hal_msp.c \
 Src/system_stm32f4xx.c \
+Src/hardware.c \
 Src/main.c
 
 # ASM sources
@@ -121,6 +124,7 @@ AS_INCLUDES =
 
 # C includes
 C_INCLUDES =  \
+-I../../src \
 -IInc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \

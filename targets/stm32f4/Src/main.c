@@ -1,5 +1,6 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
+#include "console.h"
 
 UART_HandleTypeDef huart1;
 
@@ -178,9 +179,7 @@ void assert_failed(uint8_t* file, uint32_t line)
 #endif
 
 void HAL_UART_RxCpltCallback (UART_HandleTypeDef *huart) {
-  // echo
-  // HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-  HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
+  console_put_char(ch);
   HAL_UART_Receive_IT(&huart1, (uint8_t *)&ch, 1);
 }
 
