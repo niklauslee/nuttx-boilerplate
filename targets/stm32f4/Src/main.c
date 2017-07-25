@@ -2,6 +2,8 @@
 #include "stm32f4xx_hal.h"
 #include "console.h"
 
+#include "jerryscript.h"
+
 UART_HandleTypeDef huart1;
 
 
@@ -17,15 +19,19 @@ int main(void)
   SystemClock_Config();
   MX_GPIO_Init();
   MX_USART1_UART_Init();
-
   HAL_UART_Receive_IT(&huart1, (uint8_t *)&ch, 1);
+
+  console_init();
+  jerry_init(JERRY_INIT_EMPTY);
 
   while (1)
   {
     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
-    HAL_Delay(1000);
+    HAL_Delay(500);
   }
+
+  jerry_cleanup();
+
 }
 
 void SystemClock_Config(void)

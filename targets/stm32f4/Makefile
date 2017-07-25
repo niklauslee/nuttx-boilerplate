@@ -46,10 +46,26 @@ BUILD_DIR = build
 ######################################
 # source
 ######################################
+
+JERRY_PATH = ../../deps/jerryscript/jerry-core
+
+JERRY_SRCS = \
+$(wildcard $(JERRY_PATH)/api/*.c) \
+$(wildcard $(JERRY_PATH)/debugger/*.c) \
+$(wildcard $(JERRY_PATH)/ecma/base/*.c) \
+$(wildcard $(JERRY_PATH)/ecma/builtin-objects/*.c) \
+$(wildcard $(JERRY_PATH)/ecma/builtin-objects/typedarray/*.c) \
+$(wildcard $(JERRY_PATH)/ecma/operations/*.c) \
+$(wildcard $(JERRY_PATH)/jcontext/*.c) \
+$(wildcard $(JERRY_PATH)/jmem/*.c) \
+$(wildcard $(JERRY_PATH)/jrt/*.c) \
+$(wildcard $(JERRY_PATH)/lit/*.c) \
+$(wildcard $(JERRY_PATH)/parser/js/*.c) \
+$(wildcard $(JERRY_PATH)/parser/regexp/*.c) \
+$(wildcard $(JERRY_PATH)/vm/*.c)
+
 # C sources
 C_SOURCES =  \
-../../src/console.c \
-../../src/event_loop.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c \
@@ -64,6 +80,9 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
 Drivers/BSP/STM32F4xx-Nucleo/stm32f4xx_nucleo.c \
+$(JERRY_SRCS) \
+../../src/console.c \
+../../src/event_loop.c \
 Src/stm32f4xx_it.c \
 Src/stm32f4xx_hal_msp.c \
 Src/system_stm32f4xx.c \
@@ -116,21 +135,36 @@ AS_DEFS =
 # C defines
 C_DEFS =  \
 -DUSE_HAL_DRIVER \
--DSTM32F411xE
-
+-DSTM32F411xE \
+-DJERRY_JS_PARSER=1
 
 # AS includes
 AS_INCLUDES =
 
 # C includes
 C_INCLUDES =  \
--I../../src \
--IInc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IDrivers/CMSIS/Include \
--IDrivers/BSP/STM32F4xx-Nucleo
+-IDrivers/BSP/STM32F4xx-Nucleo \
+-I../../src \
+-IInc \
+-I${JERRY_PATH} \
+-I${JERRY_PATH}/api \
+-I${JERRY_PATH}/debugger \
+-I${JERRY_PATH}/ecma/base \
+-I${JERRY_PATH}/ecma/builtin-objects \
+-I${JERRY_PATH}/ecma/builtin-objects/typedarray \
+-I${JERRY_PATH}/ecma/operations \
+-I${JERRY_PATH}/include \
+-I${JERRY_PATH}/jcontext \
+-I${JERRY_PATH}/jmem \
+-I${JERRY_PATH}/jrt \
+-I${JERRY_PATH}/lit \
+-I${JERRY_PATH}/parser/js \
+-I${JERRY_PATH}/parser/regexp \
+-I${JERRY_PATH}/vm
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
@@ -160,7 +194,6 @@ LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BU
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
 
-
 #######################################
 # build the application
 #######################################
@@ -171,8 +204,11 @@ vpath %.c $(sort $(dir $(C_SOURCES)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
+compile = $(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
+
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
-	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
+	@echo $($(quiet_)compile)
+	@$(call compile)
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
