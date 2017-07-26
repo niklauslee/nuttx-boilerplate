@@ -1,7 +1,7 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 #include "console.h"
-
+#include "event_loop.h"
 #include "jerryscript.h"
 
 UART_HandleTypeDef huart1;
@@ -21,16 +21,26 @@ int main(void)
   MX_USART1_UART_Init();
   HAL_UART_Receive_IT(&huart1, (uint8_t *)&ch, 1);
 
+  // Init event loop
+  event_loop_init();
+
   console_init();
+
+  // Initialize jerryscript
   jerry_init(JERRY_INIT_EMPTY);
 
   while (1)
   {
     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
     HAL_Delay(500);
+    event_loop_process();
   }
 
+  // Finalize jerryscript
   jerry_cleanup();
+
+  // Close event loop
+  event_loop_close();
 
 }
 
@@ -144,10 +154,6 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
 }
-
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
 
 /**
   * @brief  This function is executed in case of error occurrence.
