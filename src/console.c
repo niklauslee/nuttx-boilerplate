@@ -16,8 +16,8 @@ void console_init() {
 }
 
 void console_put_char(char ch) {
-  if (ch == '\n') {
-    print_to_uart("\n", 1);
+  if (ch == '\n' || ch == '\r') {
+    print_to_uart("\r\n", 2);
 
     // push a command event to queue.
     io_event_t *event = malloc(sizeof(io_event_t));
@@ -27,16 +27,6 @@ void console_put_char(char ch) {
     strcpy(data, command);
     event->data = data;
     push_event(event);
-
-    /*
-    jerry_value_t parsed_code = jerry_parse(command, command_idx, false);
-    if (!jerry_value_has_error_flag (parsed_code)) {
-      jerry_value_t ret_value = jerry_run(parsed_code);
-      print_value(ret_value);
-      jerry_release_value(ret_value);
-    }
-    jerry_release_value(parsed_code);
-    */
 
     print_to_uart(">", 1);
     command_idx = 0;

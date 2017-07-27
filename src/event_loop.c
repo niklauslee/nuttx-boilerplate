@@ -86,7 +86,7 @@ void print_value (const jerry_value_t value)
     print_to_uart("[object]", 8);
   }
 
-  print_to_uart("\n", 1);
+  print_to_uart("\r\n", 2);
 }
 
 void handle_command_event(io_event_t *event) {
