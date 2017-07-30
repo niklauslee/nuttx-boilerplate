@@ -32,7 +32,7 @@ int main(void)
   while (1)
   {
     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-    HAL_Delay(500);
+    // HAL_Delay(500);
     event_loop_process();
   }
 
@@ -191,7 +191,7 @@ void assert_failed(uint8_t* file, uint32_t line)
 #endif
 
 void HAL_UART_RxCpltCallback (UART_HandleTypeDef *huart) {
-  console_put_char(ch);
+  console_injectc(ch);
   HAL_UART_Receive_IT(&huart1, (uint8_t *)&ch, 1);
 }
 

@@ -38,55 +38,16 @@ void event_loop_init() {
 void event_loop_close() {
 }
 
-void print_to_uart(char *data, unsigned int size) {
-  uart_transmit(data, size);
-}
+void print_value (const jerry_value_t value) {
+  jerry_value_t str_value = jerry_value_to_string(value);
 
-void print_value (const jerry_value_t value)
-{
-  if (jerry_value_is_undefined (value))
-  {
-    print_to_uart("undefined", 9);
-  }
-  else if (jerry_value_is_null (value))
-  {
-    print_to_uart("null", 4);
-  }
-  else if (jerry_value_is_boolean (value))
-  {
-    if (jerry_get_boolean_value (value))
-    {
-      print_to_uart("true", 4);
-    }
-    else
-    {
-      print_to_uart("false", 5);
-    }
-  }
-  /* Float value */
-  else if (jerry_value_is_number (value))
-  {
-    print_to_uart("number", 6);
-  }
-  /* String value */
-  else if (jerry_value_is_string (value))
-  {
-    /* Determining required buffer size */
-    jerry_size_t req_sz = jerry_get_string_size (value);
-    jerry_char_t str_buf_p[req_sz];
+  /* Determining required buffer size */
+  jerry_size_t req_sz = jerry_get_string_size (str_value);
+  jerry_char_t str_buf_p[req_sz + 1];
 
-    jerry_string_to_char_buffer (value, str_buf_p, req_sz);
-    str_buf_p[req_sz] = '\0';
-    print_to_uart((char *) str_buf_p, req_sz);
-    // printf ("%s", (const char *) str_buf_p);
-  }
-  /* Object reference */
-  else if (jerry_value_is_object (value))
-  {
-    print_to_uart("[object]", 8);
-  }
-
-  print_to_uart("\r\n", 2);
+  jerry_string_to_char_buffer (str_value, str_buf_p, req_sz);
+  str_buf_p[req_sz] = '\0';
+  console_print((char *) str_buf_p);
 }
 
 void handle_command_event(io_event_t *event) {
