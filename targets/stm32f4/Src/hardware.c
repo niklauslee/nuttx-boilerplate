@@ -24,23 +24,4 @@ double jerry_port_get_current_time (void) {
 }
 
 void jerry_port_console (const char *format, ...) {
-    if (strlen(format) == 1 && format[0] == 0x0a) { // line feed (\n)
-        printf("\r"); // add CR for proper display in serial monitors
-
-        jerry_port_console_printing = false; // not printing anymore...
-    }
-
-    if (!jerry_port_console_printing) {
-        pc.printf("\33[100D\33[2K");
-        jerry_port_console_printing = true;
-    }
-
-    va_list args;
-    va_start(args, format);
-    vfprintf(stdout, format, args);
-    va_end(args);
-
-    if (strlen(format) == 1 && format[0] == 0x0a && replInstance) {
-        replInstance->printJustHappened();
-    }
 }
