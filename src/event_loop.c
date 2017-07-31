@@ -5,6 +5,7 @@
 #include "event_loop.h"
 #include "kameleon_config.h"
 
+#include "console.h"
 #include "hardware.h"
 #include "jerryscript.h"
 
@@ -39,20 +40,41 @@ void event_loop_close() {
 }
 
 void print_value (const jerry_value_t value) {
-  jerry_value_t str_value = jerry_value_to_string(value);
 
-  /* Determining required buffer size */
-  jerry_size_t req_sz = jerry_get_string_size (str_value);
-  jerry_char_t str_buf_p[req_sz + 1];
+  if (jerry_value_has_error_flag(value)) {
+    console_error("Error.");
+  } else {
+    jerry_value_t str_value = jerry_value_to_string(value);
 
-  jerry_string_to_char_buffer (str_value, str_buf_p, req_sz);
-  str_buf_p[req_sz] = '\0';
-  console_print((char *) str_buf_p);
+    /* Determining required buffer size */
+    jerry_size_t req_sz = jerry_get_string_size (str_value);
+    jerry_char_t str_buf_p[req_sz + 1];
+
+    jerry_string_to_char_buffer (str_value, str_buf_p, req_sz);
+    str_buf_p[req_sz] = '\0';
+    if (jerry_value_is_string(value)) {
+      char str[req_sz + 3];
+      strcpy(str, "\"");
+      strcat(str, (char *) str_buf_p);
+      strcat(str, "\"");
+      console_log(str);
+    } else if (jerry_value_is_array(value)) {
+      char str[req_sz + 3];
+      strcpy(str, "[");
+      strcat(str, (char *) str_buf_p);
+      strcat(str, "]");
+      console_log(str);
+    } else {
+      console_log((char *) str_buf_p);
+    }
+  }
 }
 
 void handle_command_event(io_event_t *event) {
   jerry_value_t parsed_code = jerry_parse(event->data, strlen(event->data), false);
-  if (!jerry_value_has_error_flag (parsed_code)) {
+  if (jerry_value_has_error_flag (parsed_code)) {
+    console_error("Syntax error while parsing code.");
+  } else {
     jerry_value_t ret_value = jerry_run(parsed_code);
     print_value(ret_value);
     jerry_release_value(ret_value);

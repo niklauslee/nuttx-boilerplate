@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include "console.h"
 #include "hardware.h"
@@ -15,7 +16,7 @@ char buffer[MAX_COMMAND_LENGTH];
 /**
  * length of command
  */
-unsigned char buffer_length = 0;
+unsigned int buffer_length;
 
 /**
  * Indicate whether now in escape sequence
@@ -30,19 +31,19 @@ char escape_sequence[3];
 /**
  * Length of escape sequence
  */
-char escape_sequence_length = 0;
+unsigned int escape_sequence_length = 0;
 
 /**
  * Send a char to the console's serial port
  */
-void putc(char ch) {
+void __putc(char ch) {
   uart_transmit(&ch, 1);
 }
 
 /**
  * Send a string (without the last '\0') to the console's serial port
  */
-void puts(char *str) {
+void __puts(char *str) {
   uart_transmit(str, strlen(str));
 }
 
@@ -50,7 +51,12 @@ void puts(char *str) {
  * Initialize the console
  */
 void console_init() {
-  putc('>');
+  buffer_length = 0;
+  in_escape_sequence = false;
+  escape_sequence_length = 0;
+  __puts("\33[2K\r");
+  __puts("\r\nWelcome to Kameleon!\r\n");
+  __puts("> ");
 }
 
 /**
@@ -69,8 +75,8 @@ void console_injectc(char ch) {
   } else {
     switch (ch) {
       case '\r': /* carrage return */
-        putc(ch);
-        putc('\n');
+        __putc(ch);
+        __putc('\n');
 
         // push a buffer event to queue.
         io_event_t *event = malloc(sizeof(io_event_t));
@@ -81,18 +87,18 @@ void console_injectc(char ch) {
         event->data = data;
         push_event(event);
 
-        putc('>');
+        __puts("> ");
         buffer_length = 0;
         break;
       case 0x7f: /* backspace */
         if (buffer_length > 0) {
           buffer_length--;
           buffer[buffer_length] = '\0';
-          puts("\033[D\033[K");
+          __puts("\033[D\033[K");
         }
         break;
       case 0x1b: /* escape char */
-        // puts("\033[s"); // save current cursor pos
+        // __puts("\033[s"); // save current cursor pos
         in_escape_sequence = true;
         escape_sequence_length = 0;
         break;
@@ -100,18 +106,44 @@ void console_injectc(char ch) {
         // check buffer overflow
         buffer[buffer_length] = ch;
         buffer_length++;
-        putc(ch);
+        __putc(ch);
         break;
     }
   }
 }
 
 /**
- * Print a string to the console
+ * Print a log string to the console
  */
-void console_print(char *str) {
-  puts("\33[2K\r");
-  puts(str);
-  puts("\r\n");
-  puts(">");
+void console_log(char *str) {
+  __puts("\33[2K\r"); // set column to 0
+  __puts("\33[36m"); // cyan
+  __puts(str);
+  __puts("\33[0m"); // back to normal color
+  __puts("\r\n");
+  __puts("> ");
+}
+
+/**
+ * Print a warning string to the console
+ */
+void console_warning(char *str) {
+  __puts("\33[2K\r"); // set column to 0
+  __puts("\33[33m"); // yellow
+  __puts(str);
+  __puts("\33[0m"); // back to normal color
+  __puts("\r\n");
+  __puts("> ");
+}
+
+/**
+ * Print an error string to the console
+ */
+void console_error(char *str) {
+  __puts("\33[2K\r"); // set column to 0
+  __puts("\33[31m"); // red
+  __puts(str);
+  __puts("\33[0m"); // back to normal color
+  __puts("\r\n");
+  __puts("> ");
 }

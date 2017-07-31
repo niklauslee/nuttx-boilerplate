@@ -4,6 +4,9 @@
 void console_init();
 void console_injectc(char ch);
 void console_putc(char ch);
-void console_print(char *str);
+
+void console_log(char *str);
+void console_warning(char *str);
+void console_error(char *str);
 
 #endif /* __CONSOLE_H */
