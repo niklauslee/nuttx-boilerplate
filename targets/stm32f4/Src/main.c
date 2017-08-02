@@ -2,6 +2,7 @@
 #include "stm32f4xx_hal.h"
 #include "console.h"
 #include "event_loop.h"
+#include "tiny-uv.h"
 #include "jerryscript.h"
 
 UART_HandleTypeDef huart1;
@@ -21,8 +22,14 @@ int main(void)
   MX_USART1_UART_Init();
   HAL_UART_Receive_IT(&huart1, (uint8_t *)&ch, 1);
 
+  // Turn on LED
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+
   // Init event loop
   event_loop_init();
+
+  // init loop;
+  uv_loop_init(loop);
 
   console_init();
 
@@ -31,7 +38,6 @@ int main(void)
 
   while (1)
   {
-    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
     // HAL_Delay(500);
     event_loop_process();
   }

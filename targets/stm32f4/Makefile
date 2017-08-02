@@ -83,6 +83,7 @@ Drivers/BSP/STM32F4xx-Nucleo/stm32f4xx_nucleo.c \
 $(JERRY_SRCS) \
 ../../src/console.c \
 ../../src/event_loop.c \
+../../src/tiny-uv.c \
 Src/stm32f4xx_it.c \
 Src/stm32f4xx_hal_msp.c \
 Src/system_stm32f4xx.c \
