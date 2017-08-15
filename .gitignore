@@ -5,6 +5,9 @@ targets/stm32f4/build/*
 /test/tmp/*
 gdbinit
 
+# build files
+src/*.a
+
 # config files
 *.config
 !build.config

@@ -3,8 +3,20 @@
 # see the file kconfig-language.txt in the NuttX tools repository.
 #
 
-config KAMELEON_CORE
-	bool "Kameleon Core"
-	default y
-	---help---
-		Enable the Kameleon Core
+config KAMELEON
+  bool "Kameleon"
+  default y
+  ---help---
+    Enable Kameleon platform
+
+if KAMELEON
+
+config KAMELEON_PRIORITY
+  int "Kameleon task priority"
+  default 100
+
+config KAMELEON_STACKSIZE
+  int "Kameleon stack size"
+  default 16384
+
+endif

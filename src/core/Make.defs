@@ -34,6 +34,6 @@
 #
 ############################################################################
 
-ifeq ($(CONFIG_KAMELEON_CORE),y)
+ifeq ($(CONFIG_KAMELEON),y)
 CONFIGURED_APPS += core
 endif
