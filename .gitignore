@@ -1,34 +1,9 @@
-# Produced files
 
+# Produced files
 targets/stm32f4/build
 targets/stm32f4/build/*
 /test/tmp/*
 gdbinit
-
-# IDE related files
-nbproject
-**.sublime-project
-**.sublime-workspace
-.idea
-
-# Random Trash
-*.swp
-*.swo
-*.h.gch
-*~
-core
-vgcore.*
-**.orig
-**.directory
-**.patch
-.tags*
-cscope.*
-*.pyc
-
-# ctags and ID database
-tags
-ID
-TAGS
 
 # config files
 *.config

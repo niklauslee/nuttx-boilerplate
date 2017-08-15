@@ -1,56 +1,42 @@
-# Setup
+# Build
 
-### Install ARM GCC
+1. Checkout repository
 
-Search Google
-
-Check whether installed or not:
-```
-$ arm-none-eabi-gcc -v
-```
-
-### ST-LINK
-
-```
-$ brew install stlink
-```
-
-### Clone repository
-
-```
+```sh
 $ git clone https://github.com/niklauslee/kameleon-firmware.git
-```
-
-### Clone submodules
-
-Typically submodules will be cloned during cloning the repository. If not cloned, try followings:
-
-```
+$ cd kameleon-firmware
 $ git submodule init
 $ git submodule update
 ```
 
-# Build
+2. Configure NuttX
 
-Move to a target folder
-
+```sh
+$ cd kameleon-firmware/deps/nuttx/tools
+$ ./configure.sh -a ../../src nucleo-f4x1re/f411-nsh
+$ cd .. # at kameleon-firmware/deps/nuttx
+$ make menuconfig
 ```
-$ cd targets/stm32f4
+
+3. Change Configuration Variables
+
+* `RTOS Features`
+  * `Tasks and Scheduling`
+    * `Application entry point` : __kameleon_main__
+* `Binary Loader`
+  * `Disable BINFMT support` : __Check__
+* `Application Configuration`
+  * `Platform-specific Support`
+    * `Have C++ initialization` : __Uncheck__
+
+3. Make
+
+```sh
 $ make
 ```
 
-# Flash & Run
+4. Flash
 
-Run st-link
-
-```
-$ st-util
-```
-
-Flash via gdb
-
-```
-$ make flash
-...
-(gdb) run
+```sh
+$ st-flash write nuttx.bin 0x8000000
 ```
