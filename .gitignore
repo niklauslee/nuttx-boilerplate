@@ -6,6 +6,7 @@ targets/stm32f4/build/*
 gdbinit
 
 # build files
+src/*.o
 src/*.a
 
 # config files

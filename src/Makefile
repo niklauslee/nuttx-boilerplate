@@ -36,7 +36,6 @@
 ############################################################################
 
 include $(TOPDIR)/Make.defs
-include Make.defs
 
 ASRCS=
 CSRCS=
@@ -49,7 +48,7 @@ MAINOBJ = $(MAINSRC:.c=$(OBJEXT))
 SRCS = $(ASRCS) $(CSRCS) $(MAINSRC)
 OBJS = $(AOBJS) $(COBJS) $(MAINOBJ)
 
-BIN = $(APPDIR)$(DELIM)libapps$(LIBEXT)
+BIN = libapps$(LIBEXT)
 
 all: $(BIN)
 .PHONY: dirlinks context preconfig clean distclean
