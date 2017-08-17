@@ -25,6 +25,8 @@ $ make menuconfig
     * `Application entry point` : __kameleon_main__
 * `Binary Loader`
   * `Disable BINFMT support` : __Check__
+* `Library Routines`
+  * `Have C++ compiler` : __Uncheck__
 * `Application Configuration`
   * `Platform-specific Support`
     * `Have C++ initialization` : __Uncheck__
