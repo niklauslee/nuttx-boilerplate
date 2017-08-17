@@ -1,10 +1,8 @@
 ############################################################################
-# apps/Makefile
+# apps/import/Makefile
 #
-#   Copyright (C) 2011 Uros Platise. All rights reserved.
-#   Copyright (C) 2011-2014 Gregory Nutt. All rights reserved.
-#   Authors: Uros Platise <uros.platise@isotel.eu>
-#            Gregory Nutt <gnutt@nuttx.org>
+#   Copyright (C) 2014 Gregory Nutt. All rights reserved.
+#   Author: Gregory Nutt <gnutt@nuttx.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -35,45 +33,32 @@
 #
 ############################################################################
 
-include $(TOPDIR)/Make.defs
-include Make.defs
+-include $(TOPDIR)/.config
+-include $(TOPDIR)/Make.defs
 
-ASRCS=
-CSRCS=
-MAINSRC=kameleon_main.c
+# Sub-directories from the NuttX export package
 
-AOBJS = $(ASRCS:.S=$(OBJEXT))
-COBJS = $(CSRCS:.c=$(OBJEXT))
-MAINOBJ = $(MAINSRC:.c=$(OBJEXT))
+SUBDIRS = arch build include libs startup tmp
+FILES   = .config
 
-SRCS = $(ASRCS) $(CSRCS) $(MAINSRC)
-OBJS = $(AOBJS) $(COBJS) $(MAINOBJ)
+all: nothing
+.PHONY: nothing context depend clean distclean
+.PRECIOUS: ../libapps$(LIBEXT)
 
-BIN = $(APPDIR)$(DELIM)libapps$(LIBEXT)
+nothing:
 
-all: $(BIN)
-.PHONY: dirlinks context preconfig clean distclean
-.PRECIOUS: $(BIN)
-
-$(BIN): $(OBJS)
-	$(call ARCHIVE, $(BIN), $(OBJS))
-	$(Q) touch $@
-
-$(AOBJS): %$(OBJEXT): %.S
-	$(call ASSEMBLE, $<, $@)
-
-$(COBJS): %$(OBJEXT): %.c
-	$(call COMPILE, $<, $@)
-
-$(MAINOBJ): %$(OBJEXT): %.c
-	$(call COMPILE, $<, $@)
-
-dirlinks:
-
-preconfig:
+install:
 
 context:
 
+depend:
+
 clean:
-	$(call DELFILE, $(BIN))
-	$(call DELFILE, $(OBJS))
+
+distclean:
+	$(foreach SDIR, $(SUBDIRS), $(call DELDIR, $(SDIR)))
+	$(foreach FILE, $(FILES), $(call DELFILE, $(FILE)))
+
+# Library path
+
+LIBPATH = $(TOPDIR)/libs

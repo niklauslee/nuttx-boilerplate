@@ -42,8 +42,45 @@ APPNAME = kameleon
 PRIORITY = $(CONFIG_KAMELEON_PRIORITY)
 STACKSIZE = $(CONFIG_KAMELEON_STACKSIZE)
 
-ASRCS =
-CSRCS =
+# TUV_PLATFORM=arm-nuttx
+# TUV_BOARD=stm32f4dis
+# TUV_SYSTEMROOT=$(TOPDIR)
+
+# LIBTUV_PATH = ../../deps/libtuv
+
+# CFLAGS += -D__NUTTX__ \
+          -I$(LIBTUV_PATH)/include \
+          -I$(LIBTUV_PATH)/src \
+          -I$(LIBTUV_PATH)/src/unix
+
+# ASRCS =
+# CSRCS = $(LIBTUV_PATH)/include/uv-unix.h \
+        $(LIBTUV_PATH)/include/uv-linux.h \
+        $(LIBTUV_PATH)/src/inet.c \
+        $(LIBTUV_PATH)/src/threadpool.c \
+        $(LIBTUV_PATH)/src/uv-common.c \
+        $(LIBTUV_PATH)/src/tuv_debuglog.c \
+        $(LIBTUV_PATH)/src/unix/async.c \
+        $(LIBTUV_PATH)/src/unix/atomic-ops.h \
+        $(LIBTUV_PATH)/src/unix/core.c \
+        $(LIBTUV_PATH)/src/unix/fs.c \
+        $(LIBTUV_PATH)/src/unix/getaddrinfo.c \
+        $(LIBTUV_PATH)/src/unix/internal.h \
+        $(LIBTUV_PATH)/src/unix/loop.c \
+        $(LIBTUV_PATH)/src/unix/loop-watcher.c \
+        $(LIBTUV_PATH)/src/unix/poll.c \
+        $(LIBTUV_PATH)/src/unix/process.c \
+        $(LIBTUV_PATH)/src/unix/spinlock.h \
+        $(LIBTUV_PATH)/src/unix/stream.c \
+        $(LIBTUV_PATH)/src/unix/tcp.c \
+        $(LIBTUV_PATH)/src/unix/thread.c \
+        $(LIBTUV_PATH)/src/unix/timer.c \
+        $(LIBTUV_PATH)/src/unix/tty.c \
+        $(LIBTUV_PATH)/src/unix/udp.c \
+        $(LIBTUV_PATH)/src/unix/nuttx.c
+
+ASRCS=
+CSRCS=
 MAINSRC = kameleon_main.c
 
 CONFIG_KAMELEON_PROGNAME ?= kameleon$(EXEEXT)
