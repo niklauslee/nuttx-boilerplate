@@ -1,12 +1,3 @@
-[submodule "deps/jerryscript"]
-	path = deps/jerryscript
-	url = https://github.com/jerryscript-project/jerryscript.git
-[submodule "deps/libtuv"]
-	path = deps/libtuv
-	url = https://github.com/Samsung/libtuv.git
-[submodule "deps/iotjs"]
-	path = deps/iotjs
-	url = https://github.com/Samsung/iotjs.git
 [submodule "deps/nuttx"]
 	path = deps/nuttx
 	url = https://bitbucket.org/nuttx/nuttx.git
