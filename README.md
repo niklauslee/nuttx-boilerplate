@@ -7,28 +7,22 @@
 
 Required packages:
 * __GCC ARM__
-* __CMake__ : https://cmake.org/
-* __kconfig-frontends__
+* __cmake__ : https://cmake.org/
+* __kconfig-frontends__ : https://github.com/PX4/NuttX/tree/master/misc/tools
+* __st-link tool__ : https://github.com/texane/stlink
 
-```sh
-$ git clone https://github.com/jameswalmsley/kconfig-frontends.git
-$ cd kconfig-frontends
-$ ./bootstrap
-$ ./configure --enable-mconf
-$ make
-$ sudo make install
-$ sudo ldconfig
-```
+__for Linux__:
+https://github.com/niklauslee/kameleon-firmware/wiki/Ubuntu-Linux
 
-* __St-Util__ for Flash
+__for Atom Editor__: https://github.com/niklauslee/kameleon-firmware/wiki/Development-using-Atom
 
 # Build
 
 1. Checkout repository
 
 ```sh
-$ git clone https://github.com/niklauslee/kameleon-firmware.git
-$ cd kameleon-firmware
+$ git clone https://github.com/niklauslee/nuttx-boilerplate.git
+$ cd nuttx-boilerplate
 $ git submodule init
 $ git submodule update
 ```
@@ -36,16 +30,16 @@ $ git submodule update
 2. Configure NuttX
 
 ```sh
-$ cd kameleon-firmware/deps/nuttx/tools
+$ cd nuttx-boilerplate/deps/nuttx/tools
 $ ./configure.sh -a ../../src stm32f411e-disco/nsh
 $ cd ..
 ```
-`.config` and `Make.defs` are created at `kameleon-firmware/deps/nuttx`
+`.config` and `Make.defs` are created at `nuttx-boilerplate/deps/nuttx`
 
 3. Change Configuration Variables
 
 ```sh
-# at kameleon-firmware/deps/nuttx
+# at nuttx-boilerplate/deps/nuttx
 $ make menuconfig
 ```
 
@@ -94,5 +88,6 @@ $ screen /dev/tty.usbmodem1 115200 # macOS
 $ screen /dev/ttyACM0 115200 # Linux
 
 # Hit return several times,
+
 # then "Hello, World" will be printed.
 ```
