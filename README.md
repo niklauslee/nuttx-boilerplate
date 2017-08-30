@@ -30,30 +30,29 @@ $ git submodule update
 2. Configure NuttX
 
 ```sh
-$ cd nuttx-boilerplate/deps/nuttx/tools
+$ cd deps/nuttx/tools
 $ ./configure.sh -a ../../src stm32f411e-disco/nsh
 $ cd ..
 ```
-`.config` and `Make.defs` are created at `nuttx-boilerplate/deps/nuttx`
+`.config` and `Make.defs` are created at `deps/nuttx`
 
 3. Change Configuration Variables
 
 ```sh
-# at nuttx-boilerplate/deps/nuttx
+# at deps/nuttx
+$ cp ../../defconfig .config
+```
+
+Or, configure manually using Kconfig-frontend as follow:
+
+```sh
+# at deps/nuttx
 $ make menuconfig
 ```
 
 * `System Type`
   * `STM32 Peripheral Support`
     * `OTG FS` : __Check__
-* `Board Selection`
-  * `Enable boardctl() interface` : __Check__
-    * `Enable USB device controls` : __Check__
-* `RTOS Features`
-  * `Tasks and Scheduling`
-    * `Application entry point` : __kameleon_main__
-  * `Files and I/O`
-    * `Enable /dev/console` : __Uncheck__
 * `Device Drivers`
   * `Serial Driver Support`
     * `Serial console` : __No serial console__
@@ -62,6 +61,14 @@ $ make menuconfig
       * `CDC/ACM console device` : __Check__
       * `Receive buffer size` : __256__
       * `Transmit buffer size` : __256__
+* `Board Selection`
+  * `Enable boardctl() interface` : __Check__
+    * `Enable USB device controls` : __Check__
+* `RTOS Features`
+  * `Tasks and Scheduling`
+    * `Application entry point` : __kameleon_main__
+  * `Files and I/O`
+    * `Enable /dev/console` : __Uncheck__
 * `Binary Loader`
   * `Disable BINFMT support` : __Check__
 * `Library Routines`
